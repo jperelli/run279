@@ -14,7 +14,7 @@ interface Partial {
   lock: boolean;
 }
 
-export default function ListMap() {
+export default function Planner() {
   const [length, setLength] = useState(21);
   const [partials, setPartials] = useState<Array<Partial>>(
     Array(length).fill({ km: 0, pace: 0 }).map((partial, i) => ({

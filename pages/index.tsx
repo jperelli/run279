@@ -19,6 +19,10 @@ const Home: NextPage = () => {
         <Link href="/plan" >
           Planner
         </Link>
+        <hr />
+        <Link href="/compare" >
+          Comparer
+        </Link>
       </main>
     </div>
   )
