@@ -1,11 +1,11 @@
-// deno run --allow-net --allow-write --location="http://localhost/" --allow-read scripts/mitja2020.ts
+// deno run --allow-net --unsafely-ignore-certificate-errors --allow-write --location="http://localhost/" --allow-read scripts/mitja2020.ts
 
 import { cheerio } from "https://deno.land/x/cheerio@1.0.4/mod.ts";
 import { writeCSV } from "https://deno.land/x/csv@v0.6.0/mod.ts";
 import { createClient } from "https://deno.land/x/supabase@1.2.0/mod.ts";
 import { config } from "https://deno.land/x/dotenv@v3.0.0/mod.ts";
 
-const env = config();
+const env = config({ path: ".env.local" });
 
 const main = async () => {
   const COLS = [
@@ -21,7 +21,7 @@ const main = async () => {
     "Source",
     "Detail Source",
   ];
-  const MAX_PAGES = 1853;
+  const MAX_PAGES = 1520;
   // const MAX_PAGES = 1;
   const data: any[] = [];
   const decoder = new TextDecoder("iso-8859-1");
@@ -34,10 +34,10 @@ const main = async () => {
     throw new Error("No Race found");
   }
 
-  const race_id = races[0].id;
+  const race_id = "c506cac4-4d1e-4d1b-8561-c9c8985daef6"; // 2018
 
-  for (let page = 0; page < MAX_PAGES; page++) {
-    const url = `https://edreamsmitjabarcelona.com/resultados/2020/?pagina=${page}`;
+  for (let page = 1; page <= MAX_PAGES; page++) {
+    const url = `https://resultados.edreamsmitjabarcelona.com/2017/en/results/?page=${page}`;
     console.log(`Fetching ${url}`);
     const res = await fetch(url);
     const response = await res.arrayBuffer();
@@ -70,6 +70,7 @@ const main = async () => {
       source_url: d[10],
       race_id,
     }));
+    // console.log(toInsert); return undefined
     const { data: insert_data, error: insert_error } = await supabase
       .from("run")
       .insert(toInsert, { returning: "minimal" });
