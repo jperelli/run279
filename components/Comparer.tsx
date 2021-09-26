@@ -19,6 +19,7 @@ const supabase = createClient(
 interface Race {
   id: string;
   name: string;
+  date: string;
 }
 
 function Race(props: { race: Race; myTime: number; myPace: string }) {
@@ -100,7 +101,10 @@ export default function Comparer() {
     const fn = async () => {
       const { data: dataRaces, error: racesError } = await supabase
         .from<Race>("race")
-        .select("*");
+        .select("*")
+        .order("date", { ascending: false })
+        .order("name");
+
       if (!dataRaces || racesError) {
         throw new Error("No races found: " + racesError);
       }
