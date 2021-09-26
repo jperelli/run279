@@ -83,7 +83,7 @@ export default function Planner() {
   }, [total]);
 
   return (
-    <>
+    <div className="p-2">
       <label htmlFor="length">Distancia</label>
       <input
         id="length"
@@ -95,8 +95,8 @@ export default function Planner() {
         <thead>
           <tr>
             <td>km</td>
-            <td>pace</td>
-            <td>lock</td>
+            <td className="w-full">pace</td>
+            <td></td>
           </tr>
         </thead>
         <tbody>
@@ -106,8 +106,8 @@ export default function Planner() {
               <td>
                 <input
                   type="range"
-                  min="0"
-                  max="600"
+                  min="140"
+                  max="480"
                   value={partial.pace * 60}
                   onChange={(e) =>
                     setPartials(
@@ -119,13 +119,15 @@ export default function Planner() {
                     )
                   }
                 />
+              </td>
+              <td className="whitespace-nowrap">
                 {Math.floor(partial.pace)}m{" "}
                 {Math.floor(
                   ((partial.pace - Math.floor(partial.pace)) * 60) % 60
                 )}
                 s
               </td>
-              <td>
+              {/* <td>
                 <input
                   type="checkbox"
                   checked={partial.lock}
@@ -139,7 +141,7 @@ export default function Planner() {
                     )
                   }
                 />
-              </td>
+              </td> */}
             </tr>
           ))}
         </tbody>
@@ -169,12 +171,23 @@ export default function Planner() {
           <tr>
             <td></td>
             <td>
-              {Math.floor(total / 60)}h {Math.floor(total % 60)}m
+              Tiempo total: {Math.floor(total / 60)}h {Math.floor(total % 60)}m
+            </td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td>
+              Paso promedio: {Math.floor((total / length) % 60)}m{" "}
+              {Math.floor(
+                ((total / length - Math.floor(total / length)) * 60) % 60
+              )}
+              s
             </td>
             <td></td>
           </tr>
         </tfoot>
       </table>
-    </>
+    </div>
   );
 }
