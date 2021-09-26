@@ -48,30 +48,35 @@ function Race(props: { race: Race; myTime: number; myPace: string }) {
   );
 
   return (
-    <div className="flex justify-around">
-      <div className="w-4/12">
-        <div>{props.race.name}</div>
+    <div className="bg-white border border-gray-500 rounded-lg p-2 flex flex-col gap-4">
+      <div className="flex justify-around">
+        <span className="border-b border-gray-500">{props.race.name}</span>
+      </div>
+      <div className="flex justify-around">
         <div>
-          {Math.round((countAfter * 100) / countTotal)}% ({countAfter})
-          rapidos
+          <div>
+            <div>{Math.round((countAfter * 100) / countTotal)}%</div>
+            <div>({countAfter})</div>
+          </div>
         </div>
-      </div>
-      <div className="w-4/12">
-        {distribution && (
-          <LineChart width={200} height={100} data={distribution}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="bucket_floor" interval="preserveEnd" />
-            <YAxis interval="preserveEnd" />
-            <ReferenceLine x={props.myPace} stroke="red" />
-            <Line dataKey="count" dot={false} />
-          </LineChart>
-        )}
-      </div>
-      <div className="w-4/12">
-        <div>&nbsp;</div>
         <div>
-          {Math.round(((countTotal - countAfter) * 100) / countTotal)}% (
-          {countTotal - countAfter}) lentos
+          {distribution && (
+            <LineChart width={200} height={100} data={distribution}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="bucket_floor" interval="preserveEnd" hide />
+              <YAxis interval="preserveEnd" hide />
+              <ReferenceLine x={props.myPace} stroke="red" />
+              <Line dataKey="count" dot={false} />
+            </LineChart>
+          )}
+        </div>
+        <div>
+          <div>
+            <div>
+              {Math.round(((countTotal - countAfter) * 100) / countTotal)}%
+            </div>
+            <div>({countTotal - countAfter})</div>
+          </div>
         </div>
       </div>
     </div>
@@ -85,7 +90,7 @@ export default function Comparer() {
 
   useEffect(() => {
     setMyPace(
-      `0${Math.floor(myTime / 60)}:${(Math.floor((myTime % 60) / 5) * 5)
+      `0${Math.floor(myTime / 60)}:${(Math.floor((myTime % 60) / 1) * 1)
         .toString()
         .padStart(2, "0")}:00`
     );
@@ -105,17 +110,27 @@ export default function Comparer() {
   }, []);
 
   return (
-    <>
-      <div className="flex justify-between text-lg">
-        <div>
-          Tiempo {Math.floor(myTime / 60)}h {myTime % 60}m
+    <div className="bg-gray-50 min-h-screen text-gray-700">
+      <div className="flex flex-col items-center justify-around p-5">
+        <div className="text-2xl">Comparador 21k</div>
+        <div className="text-gray-500">(mov&eacute; el slider)</div>
+      </div>
+      <div className="flex justify-around p-4 text-xl">
+        <div className="text-center border border-blue-300 bg-blue-50 p-2 rounded-lg">
+          <div>Tiempo total</div>
+          <div>
+            {Math.floor(myTime / 60)}h {myTime % 60}m
+          </div>
         </div>
-        <div>
-          Paso {Math.floor((myTime / 21) % 60)}m{" "}
-          {Math.floor(((myTime / 21) * 60) % 60)}s / km
+        <div className="text-center border border-blue-300 bg-blue-50 p-2 rounded-lg">
+          <div>Paso</div>
+          <div>
+            {Math.floor((myTime / 21) % 60)}m{" "}
+            {Math.floor(((myTime / 21) * 60) % 60)}s / km
+          </div>
         </div>
       </div>
-      <div className="p-5 backdrop-blur-sm bg-gray-100">
+      <div className="p-5">
         <input
           className="w-full"
           type="range"
@@ -125,11 +140,16 @@ export default function Comparer() {
           onChange={(e) => setMyTime(Number(e.target.value))}
         />
       </div>
-      <div>
+      <div className="flex flex-col gap-2 p-2">
+        <div className="flex justify-around">
+          <div>Rapidos</div>
+          <div className="w-[200px]"></div>
+          <div>Lentos</div>
+        </div>
         {races.map((r) => (
           <Race key={r.id} race={r} myTime={myTime} myPace={myPace} />
         ))}
       </div>
-    </>
+    </div>
   );
 }
