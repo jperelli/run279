@@ -9,6 +9,7 @@ const Home: NextPage = () => {
         <title>Run 279 Team</title>
         <meta name="description" content="Run 279 Team" />
         <link rel="icon" href="/favicon.ico" />
+        <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
       </Head>
 
       <main>
